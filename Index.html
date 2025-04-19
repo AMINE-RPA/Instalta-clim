@@ -26,6 +26,23 @@
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     }
 
+    .packs {
+      margin-bottom: 30px;
+    }
+
+    .pack-box {
+      border-left: 5px solid #0077c2;
+      background-color: #e9f3fb;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+
+    .pack-box h3 {
+      margin-top: 0;
+      color: #0077c2;
+    }
+
     select, input {
       width: 100%;
       padding: 10px;
@@ -67,12 +84,20 @@
   <div class="container">
     <h1>Simulateur de devis - Installta-Clim</h1>
 
-    <label for="pack">Choix du pack :</label>
-    <select id="pack">
-      <option value="essentiel">Pack Essentiel - 900€</option>
-      <option value="confort">Pack Confort - 1400€</option>
-      <option value="premium">Pack Premium - 2100€</option>
-    </select>
+    <div class="packs">
+      <div class="pack-box">
+        <h3>Pack Essentiel - 900€</h3>
+        <p>Inclut l'installation de base pour lumière, volets ou thermostat selon les besoins simples d'une habitation standard.</p>
+      </div>
+      <div class="pack-box">
+        <h3>Pack Confort - 1400€</h3>
+        <p>Ajoute plus de capteurs et un meilleur contrôle (présence, température, automatisation horaire).</p>
+      </div>
+      <div class="pack-box">
+        <h3>Pack Premium - 2100€</h3>
+        <p>Contrôle complet de la maison, compatibilité multi-appareils, gestion à distance, optimisation énergétique.</p>
+      </div>
+    </div>
 
     <label for="light">Nombre de lumières connectées :</label>
     <input type="number" id="light" placeholder="Ex : 3">
@@ -85,6 +110,13 @@
 
     <label for="thermostat">Nombre de thermostats :</label>
     <input type="number" id="thermostat" placeholder="Ex : 1">
+
+    <label for="pack">Choix du pack :</label>
+    <select id="pack">
+      <option value="essentiel">Pack Essentiel - 900€</option>
+      <option value="confort">Pack Confort - 1400€</option>
+      <option value="premium">Pack Premium - 2100€</option>
+    </select>
 
     <button onclick="calculer()">Calculer</button>
     <button onclick="genererPDF()">Générer un PDF</button>
