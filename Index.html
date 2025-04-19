@@ -1,0 +1,124 @@
+<!DOCTYPE html><html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulateur Domotique</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #f5f5f5;
+      padding: 20px;
+      color: #333;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    .pack, .tableau, .simulateur {
+      background: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+    .simulateur input {
+      width: 80px;
+      padding: 5px;
+      text-align: center;
+    }
+    .total {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .btn {
+      background-color: #3498db;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .btn:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+  <h1>Offres de Domotique - Installta-Clim</h1>  <section class="pack">
+    <h2>Packs Préconfigurés</h2>
+    <ul>
+      <li><strong>Pack Essentiel</strong> : 3 volets + 3 lampes (TOR) - 1200€</li>
+      <li><strong>Pack Confort</strong> : 5 volets + 5 lampes (TOR + variateur) + 1 scénario - 1800€</li>
+      <li><strong>Pack Premium</strong> : Jusqu’à 8 volets, 8 lampes variées, scénarios, thermostat - 2500€</li>
+    </ul>
+  </section>  <section class="tableau">
+    <h2>Personnalisation à la carte</h2>
+    <table>
+      <tr><th>Élément</th><th>Prix unitaire (€)</th></tr>
+      <tr><td>Volet roulant</td><td>120</td></tr>
+      <tr><td>Lampe TOR</td><td>60</td></tr>
+      <tr><td>Lampe variation</td><td>80</td></tr>
+      <tr><td>Thermostat</td><td>200</td></tr>
+      <tr><td>Scénario (automatisme)</td><td>150</td></tr>
+    </table>
+  </section>  <section class="simulateur">
+    <h2>Simulateur de devis personnalisé</h2>
+    <label>Volets roulants : <input type="number" id="volet" min="0" value="0"></label><br>
+    <label>Lampes TOR : <input type="number" id="tor" min="0" value="0"></label><br>
+    <label>Lampe variation : <input type="number" id="var" min="0" value="0"></label><br>
+    <label>Thermostats : <input type="number" id="thermo" min="0" value="0"></label><br>
+    <label>Scénarios : <input type="number" id="scen" min="0" value="0"></label><br>
+    <br>
+    <button class="btn" onclick="calculerTotal()">Calculer</button>
+    <button class="btn" onclick="genererPDF()">Générer le devis PDF</button>
+    <p class="total" id="total"></p>
+  </section>  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>  <script>
+    function calculerTotal() {
+      let total =
+        document.getElementById("volet").value * 120 +
+        document.getElementById("tor").value * 60 +
+        document.getElementById("var").value * 80 +
+        document.getElementById("thermo").value * 200 +
+        document.getElementById("scen").value * 150;
+      document.getElementById("total").textContent = `Total estimé : ${total} €`;
+    }
+
+    function genererPDF() {
+      const {{ jsPDF }} = window.jspdf;
+      const doc = new jsPDF();
+      doc.setFontSize(14);
+      doc.text("Devis personnalisé Installta-Clim", 20, 20);
+
+      const items = [
+        ["Volets roulants", document.getElementById("volet").value, 120],
+        ["Lampes TOR", document.getElementById("tor").value, 60],
+        ["Lampe variation", document.getElementById("var").value, 80],
+        ["Thermostats", document.getElementById("thermo").value, 200],
+        ["Scénarios", document.getElementById("scen").value, 150],
+      ];
+
+      let y = 40;
+      items.forEach(([label, qty, price]) => {
+        if (qty > 0) {
+          doc.text(`${label} : ${qty} x ${price} € = ${qty * price} €`, 20, y);
+          y += 10;
+        }
+      });
+
+      let total = items.reduce((sum, [_, qty, price]) => sum + qty * price, 0);
+      doc.text(`\nTotal estimé : ${total} €`, 20, y + 10);
+      doc.save("devis_domotique.pdf");
+    }
+  </script></body>
+</html>
