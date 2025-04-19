@@ -1,183 +1,174 @@
-<!DOCTYPE html>
-<html lang="fr">
+<!DOCTYPE html><html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Simulateur Devis - Installta-Clim</title>
+  <title>Simulateur de Devis - Installta-Clim</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f4f7fa;
-      margin: 0;
-      padding: 20px;
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background-color: #f7f7f7;
     }
-
     h1 {
       text-align: center;
-      color: #0077c2;
+      color: #2b4d6e;
     }
-
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
+    .section {
       background: white;
       padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .packs {
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       margin-bottom: 30px;
     }
-
-    .pack-box {
-      border-left: 5px solid #0077c2;
-      background-color: #e9f3fb;
-      padding: 15px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-    }
-
-    .pack-box h3 {
-      margin-top: 0;
-      color: #0077c2;
-    }
-
-    select, input {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-
     label {
       font-weight: bold;
-      display: block;
-      margin-bottom: 5px;
     }
-
-    button {
-      background-color: #0077c2;
-      color: white;
-      padding: 12px 20px;
-      border: none;
+    input, select {
+      margin: 5px 0;
+      padding: 8px;
+      width: 100%;
       border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    .custom-module {
+      margin-bottom: 15px;
+      border-top: 1px dashed #ccc;
+      padding-top: 10px;
+    }
+    button {
+      background-color: #2b4d6e;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
       cursor: pointer;
-      font-size: 16px;
-      margin-right: 10px;
-    }
-
-    button:hover {
-      background-color: #005fa3;
-    }
-
-    #resultat {
-      font-size: 18px;
       margin-top: 20px;
-      font-weight: bold;
-      color: #333;
+    }
+    button:hover {
+      background-color: #3e6d94;
     }
   </style>
 </head>
-<body>
-  <div class="container">
-    <h1>Simulateur de devis - Installta-Clim</h1>
-
-    <div class="packs">
-      <div class="pack-box">
-        <h3>Pack Essentiel - 900€</h3>
-        <p>Inclut l'installation de base pour lumière, volets ou thermostat selon les besoins simples d'une habitation standard.</p>
-      </div>
-      <div class="pack-box">
-        <h3>Pack Confort - 1400€</h3>
-        <p>Ajoute plus de capteurs et un meilleur contrôle (présence, température, automatisation horaire).</p>
-      </div>
-      <div class="pack-box">
-        <h3>Pack Premium - 2100€</h3>
-        <p>Contrôle complet de la maison, compatibilité multi-appareils, gestion à distance, optimisation énergétique.</p>
-      </div>
+<body><h1>Simulateur de Devis Domotique</h1><div class="section">
+  <h2>Nos Packs</h2>
+  <ul>
+    <li><strong>Pack Essentiel :</strong> Commande lumière, 1 scénario de base, 1 interface mobile</li>
+    <li><strong>Pack Confort :</strong> Volets roulants, éclairage, scénarios personnalisés, interface mobile complète</li>
+    <li><strong>Pack Premium :</strong> Tous les éléments + intégration sécurité, caméras, contrôle vocal, supervision</li>
+  </ul>
+</div><div class="section">
+  <h2>Simulateur</h2>
+  <label for="pack-select">Choisissez un pack :</label>
+  <select id="pack-select">
+    <option>Pack Essentiel</option>
+    <option>Pack Confort</option>
+    <option>Pack Premium</option>
+  </select>  <h3>Modules personnalisés</h3>
+  <div id="modules-container">
+    <div class="custom-module">
+      <label>Nom du module :</label>
+      <input type="text" class="module-name" placeholder="ex: Capteur de température">
+      <label>Quantité :</label>
+      <input type="number" class="module-qty" value="1">
+      <label>Prix unitaire (€) :</label>
+      <input type="number" class="module-price" value="100">
     </div>
-
-    <label for="light">Nombre de lumières connectées :</label>
-    <input type="number" id="light" placeholder="Ex : 3">
-
-    <label for="shutters">Nombre de volets roulants :</label>
-    <input type="number" id="shutters" placeholder="Ex : 2">
-
-    <label for="presence">Nombre de capteurs de présence :</label>
-    <input type="number" id="presence" placeholder="Ex : 4">
-
-    <label for="thermostat">Nombre de thermostats :</label>
-    <input type="number" id="thermostat" placeholder="Ex : 1">
-
-    <label for="pack">Choix du pack :</label>
-    <select id="pack">
-      <option value="essentiel">Pack Essentiel - 900€</option>
-      <option value="confort">Pack Confort - 1400€</option>
-      <option value="premium">Pack Premium - 2100€</option>
-    </select>
-
-    <button onclick="calculer()">Calculer</button>
-    <button onclick="genererPDF()">Générer un PDF</button>
-
-    <p id="resultat"></p>
   </div>
+  <button onclick="addModule()">Ajouter un module</button>
+  <button onclick="generatePDF()">Générer le PDF</button>
+</div><script>
+  function addModule() {
+    const container = document.getElementById("modules-container");
+    const mod = document.createElement("div");
+    mod.className = "custom-module";
+    mod.innerHTML = `
+      <label>Nom du module :</label>
+      <input type="text" class="module-name" placeholder="ex: Détecteur de mouvement">
+      <label>Quantité :</label>
+      <input type="number" class="module-qty" value="1">
+      <label>Prix unitaire (€) :</label>
+      <input type="number" class="module-price" value="100">
+    `;
+    container.appendChild(mod);
+  }
 
-  <script>
-    const tarifsPacks = {
-      essentiel: 900,
-      confort: 1400,
-      premium: 2100
-    };
+  window.jsPDF = window.jspdf.jsPDF;
 
-    const tarifsModules = {
-      light: 80,
-      shutters: 150,
-      presence: 100,
-      thermostat: 120
-    };
+  function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
 
-    function calculer() {
-      const pack = document.getElementById("pack").value;
-      const light = parseInt(document.getElementById("light").value) || 0;
-      const shutters = parseInt(document.getElementById("shutters").value) || 0;
-      const presence = parseInt(document.getElementById("presence").value) || 0;
-      const thermostat = parseInt(document.getElementById("thermostat").value) || 0;
+    const date = new Date().toLocaleDateString();
+    const pack = document.getElementById("pack-select").value;
+    const modules = document.querySelectorAll(".custom-module");
+    let total = 0;
 
-      const totalModules =
-        (light * tarifsModules.light) +
-        (shutters * tarifsModules.shutters) +
-        (presence * tarifsModules.presence) +
-        (thermostat * tarifsModules.thermostat);
+    doc.setFont("Helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text("Installta-Clim", 20, 20);
+    doc.setFontSize(10);
+    doc.text("Devis n°: 2025-0419", 150, 20, { align: "right" });
+    doc.text(`Date: ${date}`, 150, 26, { align: "right" });
 
-      const total = tarifsPacks[pack] + totalModules;
+    doc.setFontSize(12);
+    doc.setFont("Helvetica", "normal");
+    doc.text("Client : [Nom du client]", 20, 35);
+    doc.text("Projet : Domotique résidentielle", 20, 42);
 
-      document.getElementById("resultat").innerText =
-        `Coût total estimé : ${total} €`;
-    }
+    doc.line(20, 48, 190, 48);
 
-    function genererPDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
+    let y = 58;
+    doc.setFont("Helvetica", "bold");
+    doc.text("Description", 20, y);
+    doc.text("Qté", 110, y);
+    doc.text("PU (€)", 130, y);
+    doc.text("Total (€)", 160, y);
+    doc.setFont("Helvetica", "normal");
+    y += 6;
 
-      const pack = document.getElementById("pack").value;
-      const light = document.getElementById("light").value;
-      const shutters = document.getElementById("shutters").value;
-      const presence = document.getElementById("presence").value;
-      const thermostat = document.getElementById("thermostat").value;
-      const total = document.getElementById("resultat").innerText;
+    let packPrice = pack === "Pack Essentiel" ? 1000 : pack === "Pack Confort" ? 1500 : 2100;
+    doc.text(`${pack}`, 20, y);
+    doc.text("1", 110, y);
+    doc.text(`${packPrice}`, 130, y);
+    doc.text(`${packPrice}`, 160, y);
+    total += packPrice;
+    y += 6;
 
-      doc.text("Devis Domotique - Installta-Clim", 10, 10);
-      doc.text(`Pack choisi : ${pack}`, 10, 20);
-      doc.text(`Lumières connectées : ${light}`, 10, 30);
-      doc.text(`Volets roulants : ${shutters}`, 10, 40);
-      doc.text(`Capteurs de présence : ${presence}`, 10, 50);
-      doc.text(`Thermostats : ${thermostat}`, 10, 60);
-      doc.text(`${total}`, 10, 70);
+    modules.forEach((mod) => {
+      const desc = mod.querySelector(".module-name").value || "Module";
+      const qty = parseInt(mod.querySelector(".module-qty").value) || 1;
+      const price = parseInt(mod.querySelector(".module-price").value) || 100;
+      const lineTotal = qty * price;
 
-      doc.save("devis-installta-clim.pdf");
-    }
-  </script>
-</body>
+      doc.text(desc, 20, y);
+      doc.text(`${qty}`, 110, y);
+      doc.text(`${price}`, 130, y);
+      doc.text(`${lineTotal}`, 160, y);
+      total += lineTotal;
+      y += 6;
+    });
+
+    const laborHours = 5;
+    const laborRate = 60;
+    const laborTotal = laborHours * laborRate;
+    doc.text("Main d'œuvre", 20, y);
+    doc.text(`${laborHours} h`, 110, y);
+    doc.text(`${laborRate}`, 130, y);
+    doc.text(`${laborTotal}`, 160, y);
+    total += laborTotal;
+    y += 10;
+
+    doc.setFont("Helvetica", "bold");
+    doc.text("Total :", 130, y);
+    doc.text(`${total} €`, 160, y);
+
+    y += 20;
+    doc.setFontSize(9);
+    doc.setFont("Helvetica", "italic");
+    doc.text("Merci pour votre confiance.", 20, y);
+    doc.text("Installta-Clim - contact@installta-clim.re", 20, y + 6);
+
+    doc.save("devis_installta_clim.pdf");
+  }
+</script></body>
 </html>
