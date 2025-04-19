@@ -2,73 +2,94 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Simulateur Domotique - Installta-Clim</title>
+  <title>Simulateur Devis - Installta-Clim</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background: #f5f5f5;
-    }
-    h1, h2 {
-      color: #2c3e50;
-    }
-    .section {
-      background: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f7fa;
+      margin: 0;
       padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    .btn {
-      padding: 10px 15px;
-      background-color: #007bff;
-      border: none;
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .btn:hover {
-      background-color: #0056b3;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-    table th, table td {
-      border: 1px solid #ddd;
-      padding: 10px;
+
+    h1 {
       text-align: center;
+      color: #0077c2;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    select, input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    button {
+      background-color: #0077c2;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+
+    button:hover {
+      background-color: #005fa3;
+    }
+
+    #resultat {
+      font-size: 18px;
+      margin-top: 20px;
+      font-weight: bold;
+      color: #333;
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <h1>Simulateur de devis - Installta-Clim</h1>
 
-  <h1>Simulateur Domotique - Installta-Clim</h1>
-
-  <div class="section">
-    <h2>Choisissez votre Pack</h2>
+    <label for="pack">Choix du pack :</label>
     <select id="pack">
-      <option value="essentiel">Pack Essentiel (900€)</option>
-      <option value="confort">Pack Confort (1400€)</option>
-      <option value="premium">Pack Premium (2100€)</option>
+      <option value="essentiel">Pack Essentiel - 900€</option>
+      <option value="confort">Pack Confort - 1400€</option>
+      <option value="premium">Pack Premium - 2100€</option>
     </select>
-  </div>
 
-  <div class="section">
-    <h2>Modules Personnalisés</h2>
-    <label>Lumières connectées : <input type="number" id="light" min="0" value="0"></label><br>
-    <label>Volets roulants : <input type="number" id="shutters" min="0" value="0"></label><br>
-    <label>Capteurs de présence : <input type="number" id="presence" min="0" value="0"></label><br>
-    <label>Thermostats : <input type="number" id="thermostat" min="0" value="0"></label>
-  </div>
+    <label for="light">Nombre de lumières connectées :</label>
+    <input type="number" id="light" placeholder="Ex : 3">
 
-  <div class="section">
-    <h2>Simulation</h2>
-    <button class="btn" onclick="calculer()">Calculer</button>
+    <label for="shutters">Nombre de volets roulants :</label>
+    <input type="number" id="shutters" placeholder="Ex : 2">
+
+    <label for="presence">Nombre de capteurs de présence :</label>
+    <input type="number" id="presence" placeholder="Ex : 4">
+
+    <label for="thermostat">Nombre de thermostats :</label>
+    <input type="number" id="thermostat" placeholder="Ex : 1">
+
+    <button onclick="calculer()">Calculer</button>
+    <button onclick="genererPDF()">Générer un PDF</button>
+
     <p id="resultat"></p>
-    <button class="btn" onclick="genererPDF()">Générer le devis PDF</button>
   </div>
 
   <script>
@@ -126,6 +147,5 @@
       doc.save("devis-installta-clim.pdf");
     }
   </script>
-
 </body>
 </html>
