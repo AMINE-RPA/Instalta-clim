@@ -83,42 +83,65 @@
     <button class="btn" onclick="calculerTotal()">Calculer</button>
     <button class="btn" onclick="genererPDF()">Générer le devis PDF</button>
     <p class="total" id="total"> le total est </p>
-  </section>  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>  <script>
-    function calculerTotal() {
-      let total =
-        document.getElementById("volet").value * 120 +
-        document.getElementById("tor").value * 60 +
-        document.getElementById("var").value * 80 +
-        document.getElementById("thermo").value * 200 +
-        document.getElementById("scen").value * 150;
-      document.getElementById("total").textContent = `Total estimé : ${total} €`;
-    }
+  </section>  
+  
 
-    function genererPDF() {
-      const {{ jsPDF }} = window.jspdf;
-      const doc = new jsPDF();
-      doc.setFontSize(14);
-      doc.text("Devis personnalisé Installta-Clim", 20, 20);
+  <script>
+  const tarifsPacks = {
+    essentiel: 900,
+    confort: 1400,
+    premium: 2100
+  };
 
-      const items = [
-        ["Volets roulants", document.getElementById("volet").value, 120],
-        ["Lampes TOR", document.getElementById("tor").value, 60],
-        ["Lampe variation", document.getElementById("var").value, 80],
-        ["Thermostats", document.getElementById("thermo").value, 200],
-        ["Scénarios", document.getElementById("scen").value, 150],
-      ];
+  const tarifsModules = {
+    light: 80,
+    shutters: 150,
+    presence: 100,
+    thermostat: 120
+  };
 
-      let y = 40;
-      items.forEach(([label, qty, price]) => {
-        if (qty > 0) {
-          doc.text(`${label} : ${qty} x ${price} € = ${qty * price} €`, 20, y);
-          y += 10;
-        }
-      });
+  function calculer() {
+    const pack = document.getElementById("pack").value;
+    const light = parseInt(document.getElementById("light").value) || 0;
+    const shutters = parseInt(document.getElementById("shutters").value) || 0;
+    const presence = parseInt(document.getElementById("presence").value) || 0;
+    const thermostat = parseInt(document.getElementById("thermostat").value) || 0;
 
-      let total = items.reduce((sum, [_, qty, price]) => sum + qty * price, 0);
-      doc.text(`\nTotal estimé : ${total} €`, 20, y + 10);
-      doc.save("devis_domotique.pdf");
-    }
-  </script></body>
+    const totalModules =
+      (light * tarifsModules.light) +
+      (shutters * tarifsModules.shutters) +
+      (presence * tarifsModules.presence) +
+      (thermostat * tarifsModules.thermostat);
+
+    const total = tarifsPacks[pack] + totalModules;
+
+    document.getElementById("resultat").innerText =
+      `Coût total estimé : ${total} €`;
+  }
+
+  function genererPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const pack = document.getElementById("pack").value;
+    const light = document.getElementById("light").value;
+    const shutters = document.getElementById("shutters").value;
+    const presence = document.getElementById("presence").value;
+    const thermostat = document.getElementById("thermostat").value;
+    const total = document.getElementById("resultat").innerText;
+
+    doc.text("Devis Domotique - Installta-Clim", 10, 10);
+    doc.text(`Pack choisi : ${pack}`, 10, 20);
+    doc.text(`Lumières connectées : ${light}`, 10, 30);
+    doc.text(`Volets roulants : ${shutters}`, 10, 40);
+    doc.text(`Capteurs de présence : ${presence}`, 10, 50);
+    doc.text(`Thermostats : ${thermostat}`, 10, 60);
+    doc.text(`${total}`, 10, 70);
+
+    doc.save("devis-installta-clim.pdf");
+  }
+  </script>
+
+
+</body>
 </html>
