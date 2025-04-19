@@ -1,148 +1,131 @@
-<!DOCTYPE html><html lang="fr">
+<!DOCTYPE html>
+<html lang="fr">
 <head>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simulateur Domotique</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <title>Simulateur Domotique - Installta-Clim</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     body {
-      font-family: 'Montserrat', sans-serif;
-      background-color: #f5f5f5;
-      padding: 20px;
-      color: #333;
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f5f5f5;
     }
     h1, h2 {
       color: #2c3e50;
     }
-    .pack, .tableau, .simulateur {
-      background: white;
+    .section {
+      background: #fff;
       padding: 20px;
       margin-bottom: 20px;
-      border-radius: 16px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .btn {
+      padding: 10px 15px;
+      background-color: #007bff;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background-color: #0056b3;
     }
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 10px;
     }
-    th, td {
-      padding: 10px;
+    table th, table td {
       border: 1px solid #ddd;
+      padding: 10px;
       text-align: center;
-    }
-    .simulateur input {
-      width: 80px;
-      padding: 5px;
-      text-align: center;
-    }
-    .total {
-      font-weight: bold;
-      margin-top: 10px;
-    }
-    .btn {
-      background-color: #3498db;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    .btn:hover {
-      background-color: #2980b9;
     }
   </style>
 </head>
 <body>
-  <h1>Offres de Domotique - Installta-Clim</h1>  <section class="pack">
-    <h2>Packs Préconfigurés</h2>
-    <ul>
-      <li><strong>Pack Essentiel</strong> : 3 volets + 3 lampes (TOR) - 1200€</li>
-      <li><strong>Pack Confort</strong> : 5 volets + 5 lampes (TOR + variateur) + 1 scénario - 1800€</li>
-      <li><strong>Pack Premium</strong> : Jusqu’à 8 volets, 8 lampes variées, scénarios, thermostat - 2500€</li>
-    </ul>
-  </section>  <section class="tableau">
-    <h2>Personnalisation à la carte</h2>
-    <table>
-      <tr><th>Élément</th><th>Prix unitaire (€)</th></tr>
-      <tr><td>Volet roulant</td><td>120</td></tr>
-      <tr><td>Lampe TOR</td><td>60</td></tr>
-      <tr><td>Lampe variation</td><td>80</td></tr>
-      <tr><td>Thermostat</td><td>200</td></tr>
-      <tr><td>Scénario (automatisme)</td><td>150</td></tr>
-    </table>
-  </section>  <section class="simulateur">
-    <h2>Simulateur de devis personnalisé</h2>
-    <label>Volets roulants : <input type="number" id="volet" min="0" value="0"></label><br>
-    <label>Lampes TOR : <input type="number" id="tor" min="0" value="0"></label><br>
-    <label>Lampe variation : <input type="number" id="var" min="0" value="0"></label><br>
-    <label>Thermostats : <input type="number" id="thermo" min="0" value="0"></label><br>
-    <label>Scénarios : <input type="number" id="scen" min="0" value="0"></label><br>
-    <br>
-    <button class="btn" onclick="calculerTotal()">Calculer</button>
+
+  <h1>Simulateur Domotique - Installta-Clim</h1>
+
+  <div class="section">
+    <h2>Choisissez votre Pack</h2>
+    <select id="pack">
+      <option value="essentiel">Pack Essentiel (900€)</option>
+      <option value="confort">Pack Confort (1400€)</option>
+      <option value="premium">Pack Premium (2100€)</option>
+    </select>
+  </div>
+
+  <div class="section">
+    <h2>Modules Personnalisés</h2>
+    <label>Lumières connectées : <input type="number" id="light" min="0" value="0"></label><br>
+    <label>Volets roulants : <input type="number" id="shutters" min="0" value="0"></label><br>
+    <label>Capteurs de présence : <input type="number" id="presence" min="0" value="0"></label><br>
+    <label>Thermostats : <input type="number" id="thermostat" min="0" value="0"></label>
+  </div>
+
+  <div class="section">
+    <h2>Simulation</h2>
+    <button class="btn" onclick="calculer()">Calculer</button>
+    <p id="resultat"></p>
     <button class="btn" onclick="genererPDF()">Générer le devis PDF</button>
-    <p class="total" id="total"> le total est </p>
-  </section>  
-  
+  </div>
 
   <script>
-  const tarifsPacks = {
-    essentiel: 900,
-    confort: 1400,
-    premium: 2100
-  };
+    const tarifsPacks = {
+      essentiel: 900,
+      confort: 1400,
+      premium: 2100
+    };
 
-  const tarifsModules = {
-    light: 80,
-    shutters: 150,
-    presence: 100,
-    thermostat: 120
-  };
+    const tarifsModules = {
+      light: 80,
+      shutters: 150,
+      presence: 100,
+      thermostat: 120
+    };
 
-  function calculer() {
-    const pack = document.getElementById("pack").value;
-    const light = parseInt(document.getElementById("light").value) || 0;
-    const shutters = parseInt(document.getElementById("shutters").value) || 0;
-    const presence = parseInt(document.getElementById("presence").value) || 0;
-    const thermostat = parseInt(document.getElementById("thermostat").value) || 0;
+    function calculer() {
+      const pack = document.getElementById("pack").value;
+      const light = parseInt(document.getElementById("light").value) || 0;
+      const shutters = parseInt(document.getElementById("shutters").value) || 0;
+      const presence = parseInt(document.getElementById("presence").value) || 0;
+      const thermostat = parseInt(document.getElementById("thermostat").value) || 0;
 
-    const totalModules =
-      (light * tarifsModules.light) +
-      (shutters * tarifsModules.shutters) +
-      (presence * tarifsModules.presence) +
-      (thermostat * tarifsModules.thermostat);
+      const totalModules =
+        (light * tarifsModules.light) +
+        (shutters * tarifsModules.shutters) +
+        (presence * tarifsModules.presence) +
+        (thermostat * tarifsModules.thermostat);
 
-    const total = tarifsPacks[pack] + totalModules;
+      const total = tarifsPacks[pack] + totalModules;
 
-    document.getElementById("resultat").innerText =
-      `Coût total estimé : ${total} €`;
-  }
+      document.getElementById("resultat").innerText =
+        `Coût total estimé : ${total} €`;
+    }
 
-  function genererPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+    function genererPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
 
-    const pack = document.getElementById("pack").value;
-    const light = document.getElementById("light").value;
-    const shutters = document.getElementById("shutters").value;
-    const presence = document.getElementById("presence").value;
-    const thermostat = document.getElementById("thermostat").value;
-    const total = document.getElementById("resultat").innerText;
+      const pack = document.getElementById("pack").value;
+      const light = document.getElementById("light").value;
+      const shutters = document.getElementById("shutters").value;
+      const presence = document.getElementById("presence").value;
+      const thermostat = document.getElementById("thermostat").value;
+      const total = document.getElementById("resultat").innerText;
 
-    doc.text("Devis Domotique - Installta-Clim", 10, 10);
-    doc.text(`Pack choisi : ${pack}`, 10, 20);
-    doc.text(`Lumières connectées : ${light}`, 10, 30);
-    doc.text(`Volets roulants : ${shutters}`, 10, 40);
-    doc.text(`Capteurs de présence : ${presence}`, 10, 50);
-    doc.text(`Thermostats : ${thermostat}`, 10, 60);
-    doc.text(`${total}`, 10, 70);
+      doc.text("Devis Domotique - Installta-Clim", 10, 10);
+      doc.text(`Pack choisi : ${pack}`, 10, 20);
+      doc.text(`Lumières connectées : ${light}`, 10, 30);
+      doc.text(`Volets roulants : ${shutters}`, 10, 40);
+      doc.text(`Capteurs de présence : ${presence}`, 10, 50);
+      doc.text(`Thermostats : ${thermostat}`, 10, 60);
+      doc.text(`${total}`, 10, 70);
 
-    doc.save("devis-installta-clim.pdf");
-  }
+      doc.save("devis-installta-clim.pdf");
+    }
   </script>
-
 
 </body>
 </html>
